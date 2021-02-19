@@ -1,8 +1,6 @@
 # network-monitoring
 Network monitoring tool (network sniffer, ping detect, networkscan)
 
-## Netwerkscan
-
 
 ## Development
 
@@ -15,7 +13,8 @@ Open de terminal en voer de volgende syntaxis uit
 git clone https://github.com/jebr/network-monitoring.git
 ```
    
-2. navigeer naar de **src** folder en voer de volgende syntax uit 
+2. navigeer naar de **src** folder en voer de volgende 
+   syntax uit voor het aanmaken van een virtuele omgeving
 
 ```python
 python3 -m venv ./venv
