@@ -1,11 +1,14 @@
 Modules:
 
-NMAP
+# NMAP
 https://pypi.org/project/python-nmap/
 https://xael.org/pages/python-nmap-en.html
 
-SCAPY
+# SCAPY
 https://scapy.readthedocs.io/en/latest/index.html
 
-Beginngers tutorial
+## Beginngers tutorial
 https://www.thepythoncode.com/article/getting-started-with-scapy
+
+## Sellect networkcard
+https://stackoverflow.com/questions/61250528/scapy-srp-doesnt-responds-with-expected-result
