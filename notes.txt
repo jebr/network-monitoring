@@ -6,3 +6,6 @@ https://xael.org/pages/python-nmap-en.html
 
 SCAPY
 https://scapy.readthedocs.io/en/latest/index.html
+
+Beginngers tutorial
+https://www.thepythoncode.com/article/getting-started-with-scapy
