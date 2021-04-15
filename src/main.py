@@ -1,32 +1,70 @@
-#!/usr/bin/env python3
+import sys
+import os
 
-import nmap
-
-scanner = nmap.PortScanner()
-
-
-def stealth_scan():
-	scanner.scan("192.168.0.137", '1-1024', '-v -SS')
-	print(scanner.scaninfo())
-
-
-# print(scanner.nmap_version())
+# PyQT modules
+from PyQt5.QtCore import QDateTime
+from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
+    QTableWidgetItem, QLabel, QTabWidget
+from PyQt5.uic import loadUi
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 
-# scanner.scan('127.0.0.1', '21')
-scanner.scan('192.168.0.202', ports="80, 443")
+# Resource path bepalen
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.environ.get("_MEIPASS2", os.path.abspath("."))
+    # logging.info('Pyinstaller file location {}'.format(base_path))
+    return os.path.join(base_path, relative_path)
 
-# print(type(scanner))
 
-print(scanner.command_line())
+# External files
+ui_main_window = resource_path('resources/ui/main.ui')
+icon_window = ""
 
-print(scanner.scaninfo())
+# Software version
+current_version = float(1.0)
 
-print(scanner.all_hosts())
+class BaseWindow:
+    # Messageboxen
+    def infobox(self, message):
+        QMessageBox.information(self, 'Info', message, QMessageBox.Ok)
 
-print(scanner['127.0.0.1'].state())
-# print(scanner['127.0.0.1'].all_protocols())
-# print(scanner['127.0.0.1']['tcp'].keys())
-# print(scanner['127.0.0.1'].has_tcp(22))
-# print(scanner['127.0.0.1'].has_tcp(80))
-# print(scanner['127.0.0.1'].has_tcp(22))
+    def warningbox(self, message):
+        QMessageBox.warning(self, 'Warning', message, QMessageBox.Close)
+
+    def criticalbox(self, message):
+        QMessageBox.critical(self, 'Error', message, QMessageBox.Close)
+
+    def question(self, message):
+        QMessageBox.question(self, 'Question', message, QMessageBox.Ok)
+
+    def noicon(self, message):
+        QMessageBox.noicon(self, '', message, QMessageBox.Ok)
+
+
+class MainPage(QtWidgets.QMainWindow, BaseWindow):
+    def __init__(self):
+        super().__init__()
+        loadUi(ui_main_window, self)
+        self.setFixedSize(900, 850)
+        self.setWindowIcon(QtGui.QIcon(icon_window))
+        # self.actionVersion.setText(f'Versie v{current_version}')
+
+    def get_networkcards(self):
+            pass
+
+def main():
+    app = QApplication(sys.argv)
+    widget = MainPage()
+    widget.show()
+    sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()
+
