@@ -1,5 +1,8 @@
 import sys
 import os
+import subprocess
+import nmap
+import ipaddress
 
 # PyQT modules
 from PyQt5.QtCore import QDateTime
@@ -29,6 +32,7 @@ icon_window = ""
 # Software version
 current_version = float(1.0)
 
+
 class BaseWindow:
     # Messageboxen
     def infobox(self, message):
@@ -47,6 +51,20 @@ class BaseWindow:
         QMessageBox.noicon(self, '', message, QMessageBox.Ok)
 
 
+def get_networkcards() -> list:
+    nics = subprocess.check_output(['ls', '/sys/class/net']).strip().decode()
+    nics = nics.split("\n")
+    return nics
+
+
+def valid_ip(address) -> bool:
+    try:
+        ipaddress.ip_address(address)
+        return True
+    except:
+        return False
+
+
 class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def __init__(self):
         super().__init__()
@@ -54,9 +72,22 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.setFixedSize(900, 850)
         self.setWindowIcon(QtGui.QIcon(icon_window))
         # self.actionVersion.setText(f'Versie v{current_version}')
+        self.pb_start_nwscan.clicked.connect(self.start_nwscan)
 
-    def get_networkcards(self):
-            pass
+        for nic in get_networkcards():
+            self.combo_networkcard.addItem(nic)
+
+    def start_nwscan(self):
+        address = self.line_ipaddress.text()
+        if not valid_ip(address):
+            print('Not a valid IP')
+        else:
+            print(address)
+        # Check Start IP-addesss
+        # Check End
+        pass
+
+
 
 def main():
     app = QApplication(sys.argv)
