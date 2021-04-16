@@ -1,8 +1,9 @@
 import sys
 import os
 import subprocess
-import nmap
 import ipaddress
+import threading
+import nmap
 
 # PyQT modules
 from PyQt5.QtCore import QDateTime
@@ -57,12 +58,7 @@ def get_networkcards() -> list:
     return nics
 
 
-def valid_ip(address) -> bool:
-    try:
-        ipaddress.ip_address(address)
-        return True
-    except:
-        return False
+nm = nmap.PortScanner()
 
 
 class MainPage(QtWidgets.QMainWindow, BaseWindow):
@@ -73,19 +69,56 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.setWindowIcon(QtGui.QIcon(icon_window))
         # self.actionVersion.setText(f'Versie v{current_version}')
         self.pb_start_nwscan.clicked.connect(self.start_nwscan)
+        self.lb_error_ip.setHidden(True)
+        self.lb_error_endip.setHidden(True)
+        self.lb_error_ip.setStyleSheet("color: red")
+        self.lb_error_endip.setStyleSheet("color: red")
+        self.lb_error_ip.setText("Enter a valid IP-address")
+        self.lb_error_endip.setText("Enter a number between 1 and 254")
 
         for nic in get_networkcards():
             self.combo_networkcard.addItem(nic)
 
+    def valid_ip(self) -> bool:
+        try:
+            ipaddress.ip_address(self.line_ipaddress.text())
+            return True
+        except:
+            self.lb_error_ip.setHidden(False)
+            start_time = threading.Timer(3, self.hide_error_messages)
+            start_time.start()
+            return False
+
+    def valid_endip(self) -> bool:
+        try:
+            int(self.line_end_ip.text())
+            ip = int(self.line_end_ip.text())
+            if 0 < ip <= 254:
+                return True
+        except:
+            self.lb_error_endip.setHidden(False)
+            start_time = threading.Timer(3, self.hide_error_messages)
+            start_time.start()
+            return False
+
+
     def start_nwscan(self):
-        address = self.line_ipaddress.text()
-        if not valid_ip(address):
-            print('Not a valid IP')
+        ip_address = ""
+        end_ip = ""
+        if self.valid_ip():
+            ip_address = self.line_ipaddress.text()
+        elif self.valid_endip():
+            end_ip = self.line_end_ip.text()
         else:
-            print(address)
-        # Check Start IP-addesss
-        # Check End
-        pass
+            # NMAP variables IP-address End IP-address and networkcard
+            ip_range = f'{ip_address}-{end_ip}'
+            scan = nm.scan(hosts=ip_range, arguments='sn')
+            print('Scan started....')
+            print(scan)
+
+    def hide_error_messages(self):
+        self.lb_error_ip.setHidden(True)
+        self.lb_error_endip.setHidden(True)
 
 
 
@@ -98,4 +131,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
 
