@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 
+
 # Resource path bepalen
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -102,35 +103,31 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             return False
 
     def start_nwscan(self):
-        # ip_address = ""
-        # end_ip = ""
-        # if self.valid_ip():
-        #
-        # elif self.valid_endip():
-        #
-        # else:
-        ip_address = self.line_ipaddress.text()
-        end_ip = self.line_end_ip.text()
-        # NMAP variables IP-address End IP-address and networkcard
-        ip_range = f'{ip_address}-{end_ip}'
-        print('Scan started....')
+        if self.valid_ip() and self.valid_endip():
+            ip_address = self.line_ipaddress.text()
+            end_ip = self.line_end_ip.text()
+            # NMAP variables IP-address End IP-address and networkcard
+            ip_range = f'{ip_address}-{end_ip}'
+            print('Scan started....')
 
-        nm.scan(hosts=f'{ip_address}-{end_ip}', arguments='-sn')
-        all_hosts = nm.all_hosts()
-        ip_list = [[host, nm[host]['status']['state']] for host in all_hosts]
-        # pprint.pprint(ip_list.sort())
+            nm.scan(hosts=f'{ip_address}-{end_ip}', arguments='-sn')
+            all_hosts = nm.all_hosts()
+            ip_list = [[host, nm[host]['status']['state']] for host in all_hosts]
+            # pprint.pprint(ip_list.sort())
 
-        # self.table_networkscan.setRowCount(5)
-        row_number = 0
-        # self.table_networkscan.resizeColumnsToContents()
-        # self.table_networkscan.setStretchLastSection(True)
-        self.table_networkscan.setColumnCount(2)
-        self.table_networkscan.setRowCount(len(ip_list))
-        for item in range(len(ip_list)):
-            # print(f'{item}: {ip_list[item]}')
-            self.table_networkscan.setItem(row_number, 0, QTableWidgetItem(ip_list[item][0]))
-            self.table_networkscan.setItem(row_number, 1, QTableWidgetItem(ip_list[item][1]))
-            row_number += 1
+            # self.table_networkscan.setRowCount(5)
+            row_number = 0
+            # self.table_networkscan.resizeColumnsToContents()
+            # self.table_networkscan.setStretchLastSection(True)
+            self.table_networkscan.setColumnCount(2)
+            self.table_networkscan.setRowCount(len(ip_list))
+            for item in range(len(ip_list)):
+                # print(f'{item}: {ip_list[item]}')
+                self.table_networkscan.setItem(row_number, 0, QTableWidgetItem(ip_list[item][0]))
+                self.table_networkscan.setItem(row_number, 1, QTableWidgetItem(ip_list[item][1]))
+                row_number += 1
+            print('Scan finished')
+
 
 
     def hide_error_messages(self):
