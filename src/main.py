@@ -110,21 +110,33 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             ip_range = f'{ip_address}-{end_ip}'
             print('Scan started....')
 
-            nm.scan(hosts=f'{ip_address}-{end_ip}', arguments='-sn')
+            nm.scan(hosts=ip_range, arguments='-sn')
             all_hosts = nm.all_hosts()
+            # Maak een lijst van devices met de status en state waarde uit de dictionary
             ip_list = [[host, nm[host]['status']['state']] for host in all_hosts]
-            # pprint.pprint(ip_list.sort())
+            # Maak een lijst van devices met de hostnames en name waarde uit de dictionary
+            host_list = [[host, nm[host]['hostnames']] for host in all_hosts]
 
-            # self.table_networkscan.setRowCount(5)
+            # Haal de dictionary met name en PTR uit de host_list en zet deze in een nieuwe lijst
+            hostnames = [host[1][0] for host in host_list]
+            hosts = []
+            # Haal de waarde van de name uit de dictionary
+            for i in hostnames:
+                for key, value in i.items():
+                    if key == 'name':
+                        hosts.append(value)
+
+            #  Vullen van de tabel
             row_number = 0
             # self.table_networkscan.resizeColumnsToContents()
             # self.table_networkscan.setStretchLastSection(True)
-            self.table_networkscan.setColumnCount(2)
+            self.table_networkscan.setColumnCount(3)
             self.table_networkscan.setRowCount(len(ip_list))
             for item in range(len(ip_list)):
                 # print(f'{item}: {ip_list[item]}')
                 self.table_networkscan.setItem(row_number, 0, QTableWidgetItem(ip_list[item][0]))
                 self.table_networkscan.setItem(row_number, 1, QTableWidgetItem(ip_list[item][1]))
+                self.table_networkscan.setItem(row_number, 2, QTableWidgetItem(hosts[item]))
                 row_number += 1
             print('Scan finished')
 
