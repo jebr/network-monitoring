@@ -70,8 +70,10 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.setWindowIcon(QtGui.QIcon(icon_window))
         # self.actionVersion.setText(f'Versie v{current_version}')
         self.setWindowTitle("Network Monitoring")
+
         self.pb_start_nwscan.clicked.connect(self.start_nwscan)
         self.pb_start_pscan.clicked.connect(self.start_pscan)
+
         self.lb_error_ip.setHidden(True)
         self.lb_error_endip.setHidden(True)
         self.lb_error_ip_ps.setHidden(True)
@@ -84,6 +86,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.lb_error_endip.setText("Enter a number between 1 and 254")
         self.lb_error_ip_ps.setText("Enter a valid IP-address")
         self.lb_error_custom_port.setText("Enter a number between 1 and 254")
+
         self.table_networkscan.setColumnCount(3)
         self.table_networkscan.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.table_networkscan.setHorizontalHeaderLabels(["IP-address", "Up/Down", "Hostname"])
