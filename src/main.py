@@ -88,8 +88,11 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.lb_error_custom_port.setText("Enter a number between 1 and 254")
 
         self.table_networkscan.setColumnCount(3)
+        self.table_portscan.setColumnCount(3)
         self.table_networkscan.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.table_portscan.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.table_networkscan.setHorizontalHeaderLabels(["IP-address", "Up/Down", "Hostname"])
+        self.table_portscan.setHorizontalHeaderLabels(["Port", "State", "Service Name"])
         self.rb_20.toggled.connect(self.disable_custom_port_line)
         self.rb_1000.toggled.connect(self.disable_custom_port_line)
         self.rb_custom.toggled.connect(self.enable_custom_port_line)
@@ -163,7 +166,12 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             print('Scan finished')
 
     def start_pscan(self):
+        ports = self.line_custom_port.text()
+
         print("Port scan started...")
+        nm.scan(hosts='192.168.0.1', arguments=f'-Pn -p {ports}')
+        all_hosts = nm.all_hosts()
+
 
         print("Port scan finished")
 
@@ -172,7 +180,6 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def hide_error_messages(self):
         self.lb_error_ip.setHidden(True)
         self.lb_error_endip.setHidden(True)
-
 
 
 def main():

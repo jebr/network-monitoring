@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -189,7 +189,7 @@
        <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -317,13 +317,13 @@
        </property>
       </widget>
      </widget>
-     <widget class="QTableView" name="table_portscan">
+     <widget class="QTableWidget" name="table_portscan">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>160</y>
         <width>601</width>
-        <height>231</height>
+        <height>241</height>
        </rect>
       </property>
      </widget>
@@ -360,7 +360,6 @@
   <tabstop>line_custom_port</tabstop>
   <tabstop>pb_start_pscan</tabstop>
   <tabstop>table_networkscan</tabstop>
-  <tabstop>table_portscan</tabstop>
  </tabstops>
  <resources/>
  <connections/>
