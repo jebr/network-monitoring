@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>631</width>
-      <height>431</height>
+      <height>441</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -81,7 +81,7 @@
       <widget class="QLabel" name="lb_ip_end">
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>170</x>
          <y>20</y>
          <width>81</width>
          <height>20</height>
@@ -107,7 +107,7 @@
       <widget class="QLineEdit" name="line_end_ip">
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>170</x>
          <y>40</y>
          <width>51</width>
          <height>20</height>
@@ -143,7 +143,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Start</string>
+        <string>Scan</string>
        </property>
        <property name="shortcut">
         <string>Return</string>
@@ -165,7 +165,7 @@
       <widget class="QLabel" name="lb_error_endip">
        <property name="geometry">
         <rect>
-         <x>180</x>
+         <x>170</x>
          <y>70</y>
          <width>311</width>
          <height>17</height>
@@ -182,7 +182,7 @@
         <x>10</x>
         <y>150</y>
         <width>601</width>
-        <height>241</height>
+        <height>251</height>
        </rect>
       </property>
       <property name="sizeAdjustPolicy">
@@ -197,6 +197,136 @@
      <attribute name="title">
       <string>Port Scanner</string>
      </attribute>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>601</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>IP-address</string>
+      </property>
+      <widget class="QLineEdit" name="line_ip_address_ps">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>113</width>
+         <height>25</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pb_start_pscan">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>100</y>
+         <width>111</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Scan</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="rb_20">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>30</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>20 Known ports</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="rb_1000">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>60</y>
+         <width>181</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1000 Known ports</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="rb_custom">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>90</y>
+         <width>151</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Custom port</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lb_error_ip_ps">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>lb_error_ip_ps</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="line_custom_port">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>90</y>
+         <width>113</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lb_error_custom_port">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>120</y>
+         <width>111</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>lb_error_ip_ps</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QTableView" name="table_portscan">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>601</width>
+        <height>231</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -223,7 +353,14 @@
   <tabstop>line_end_ip</tabstop>
   <tabstop>combo_networkcard</tabstop>
   <tabstop>pb_start_nwscan</tabstop>
+  <tabstop>line_ip_address_ps</tabstop>
+  <tabstop>rb_20</tabstop>
+  <tabstop>rb_1000</tabstop>
+  <tabstop>rb_custom</tabstop>
+  <tabstop>line_custom_port</tabstop>
+  <tabstop>pb_start_pscan</tabstop>
   <tabstop>table_networkscan</tabstop>
+  <tabstop>table_portscan</tabstop>
  </tabstops>
  <resources/>
  <connections/>

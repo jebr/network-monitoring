@@ -66,19 +66,39 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def __init__(self):
         super().__init__()
         loadUi(ui_main_window, self)
-        self.setFixedSize(900, 850)
+        self.setFixedSize(640, 480)
         self.setWindowIcon(QtGui.QIcon(icon_window))
         # self.actionVersion.setText(f'Versie v{current_version}')
+        self.setWindowTitle("Network Monitoring")
         self.pb_start_nwscan.clicked.connect(self.start_nwscan)
+        self.pb_start_pscan.clicked.connect(self.start_pscan)
         self.lb_error_ip.setHidden(True)
         self.lb_error_endip.setHidden(True)
+        self.lb_error_ip_ps.setHidden(True)
+        self.lb_error_custom_port.setHidden(True)
         self.lb_error_ip.setStyleSheet("color: red")
         self.lb_error_endip.setStyleSheet("color: red")
+        self.lb_error_ip_ps.setStyleSheet("color: red")
+        self.lb_error_custom_port.setStyleSheet("color: red")
         self.lb_error_ip.setText("Enter a valid IP-address")
         self.lb_error_endip.setText("Enter a number between 1 and 254")
+        self.lb_error_ip_ps.setText("Enter a valid IP-address")
+        self.lb_error_custom_port.setText("Enter a number between 1 and 254")
+        self.table_networkscan.setColumnCount(3)
+        self.table_networkscan.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.table_networkscan.setHorizontalHeaderLabels(["IP-address", "Up/Down", "Hostname"])
+        self.rb_20.toggled.connect(self.disable_custom_port_line)
+        self.rb_1000.toggled.connect(self.disable_custom_port_line)
+        self.rb_custom.toggled.connect(self.enable_custom_port_line)
 
         for nic in get_networkcards():
             self.combo_networkcard.addItem(nic)
+
+    def disable_custom_port_line(self):
+        self.line_custom_port.setEnabled(False)
+
+    def enable_custom_port_line(self):
+        self.line_custom_port.setEnabled(True)
 
     def valid_ip(self) -> bool:
         try:
@@ -106,6 +126,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         if self.valid_ip() and self.valid_endip():
             ip_address = self.line_ipaddress.text()
             end_ip = self.line_end_ip.text()
+            net_card = self.combo_networkcard.currentText()
             # NMAP variables IP-address End IP-address and networkcard
             ip_range = f'{ip_address}-{end_ip}'
             print('Scan started....')
@@ -116,13 +137,12 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             ip_list = [[host, nm[host]['status']['state']] for host in all_hosts]
             # Maak een lijst van devices met de hostnames en name waarde uit de dictionary
             host_list = [[host, nm[host]['hostnames']] for host in all_hosts]
-
             # Haal de dictionary met name en PTR uit de host_list en zet deze in een nieuwe lijst
             hostnames = [host[1][0] for host in host_list]
             hosts = []
             # Haal de waarde van de name uit de dictionary
-            for i in hostnames:
-                for key, value in i.items():
+            for host_dict in hostnames:
+                for key, value in host_dict.items():
                     if key == 'name':
                         hosts.append(value)
 
@@ -130,7 +150,6 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             row_number = 0
             # self.table_networkscan.resizeColumnsToContents()
             # self.table_networkscan.setStretchLastSection(True)
-            self.table_networkscan.setColumnCount(3)
             self.table_networkscan.setRowCount(len(ip_list))
             for item in range(len(ip_list)):
                 # print(f'{item}: {ip_list[item]}')
@@ -139,6 +158,11 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                 self.table_networkscan.setItem(row_number, 2, QTableWidgetItem(hosts[item]))
                 row_number += 1
             print('Scan finished')
+
+    def start_pscan(self):
+        print("Port scan started...")
+
+        print("Port scan finished")
 
 
 
