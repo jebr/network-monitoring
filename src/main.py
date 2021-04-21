@@ -59,6 +59,22 @@ def get_networkcards() -> list:
     return nics
 
 
+def valid_ip(ip) -> bool:
+    try:
+        ipaddress.ip_address(ip)
+        return True
+    except:
+        return False
+
+def state_scan(ip) -> bool:
+    scan = nm.scan(hosts=ip, arguments='-sn')
+    down = scan['nmap']['scanstats']['downhosts']
+    if down == '1':
+        return False
+    else:
+        return True
+
+
 nm = nmap.PortScanner()
 
 
@@ -85,7 +101,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.lb_error_ip.setText("Enter a valid IP-address")
         self.lb_error_endip.setText("Enter a number between 1 and 254")
         self.lb_error_ip_ps.setText("Enter a valid IP-address")
-        self.lb_error_custom_port.setText("Enter a number between 1 and 254")
+        self.lb_error_custom_port.setText("---")
 
         self.table_networkscan.setColumnCount(3)
         self.table_portscan.setColumnCount(3)
@@ -106,16 +122,6 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def enable_custom_port_line(self):
         self.line_custom_port.setEnabled(True)
 
-    def valid_ip(self) -> bool:
-        try:
-            ipaddress.ip_address(self.line_ipaddress.text())
-            return True
-        except:
-            self.lb_error_ip.setHidden(False)
-            start_time = threading.Timer(3, self.hide_error_messages)
-            start_time.start()
-            return False
-
     def valid_endip(self) -> bool:
         try:
             int(self.line_end_ip.text())
@@ -129,13 +135,18 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             return False
 
     def start_nwscan(self):
-        if self.valid_ip() and self.valid_endip():
+        if not valid_ip(self.line_ipaddress.text()):
+            self.lb_error_ip.setHidden(False)
+            start_time = threading.Timer(3, self.hide_error_messages)
+            start_time.start()
+
+        if valid_ip(self.line_ipaddress.text()) and self.valid_endip():
+            self.infobox('Port scan started...')
             ip_address = self.line_ipaddress.text()
             end_ip = self.line_end_ip.text()
             net_card = self.combo_networkcard.currentText()
             # NMAP variables IP-address End IP-address and networkcard
             ip_range = f'{ip_address}-{end_ip}'
-            print('Scan started....')
 
             nm.scan(hosts=ip_range, arguments='-sn')
             all_hosts = nm.all_hosts()
@@ -163,23 +174,69 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                 self.table_networkscan.setItem(row_number, 1, QTableWidgetItem(ip_list[item][1]))
                 self.table_networkscan.setItem(row_number, 2, QTableWidgetItem(hosts[item]))
                 row_number += 1
-            print('Scan finished')
+            self.infobox('Port scan finished')
 
     def start_pscan(self):
-        ports = self.line_custom_port.text()
+        if not valid_ip(self.line_ip_address_ps.text()):
+            self.lb_error_ip_ps.setHidden(False)
+            start_time = threading.Timer(3, self.hide_error_messages)
+            start_time.start()
 
-        print("Port scan started...")
-        nm.scan(hosts='192.168.0.1', arguments=f'-Pn -p {ports}')
-        all_hosts = nm.all_hosts()
+        if self.rb_20.isChecked():
+            ports = '--top-ports 20'
+        if self.rb_1000.isChecked():
+            ports = '--top-ports 1000'
+        if self.rb_custom.isChecked():
+            ports = f'-p {self.line_custom_port.text()}'
 
-
-        print("Port scan finished")
-
+        if valid_ip(self.line_ip_address_ps.text()):
+            if not state_scan(self.line_ip_address_ps.text()):
+                self.criticalbox('The host appears to be offline')
+            else:
+                self.infobox('Port scan started...')
+                ip_address = self.line_ip_address_ps.text()
+                nm.scan(hosts=ip_address, arguments=f'-Pn {ports}')
+                all_hosts = nm.all_hosts()
+                # TODO: afronden
+                # Maak een lijst van devices met de hostnames en name waarde uit de dictionary
+                port_list = [nm[host]['tcp'] for host in all_hosts]
+                # Haal de dictionary met name en PTR uit de host_list en zet deze in een nieuwe lijst
+                # hostnames = [host[1][0] for host in host_list]
+                top20_list = nm.scaninfo()
+                top_20 = top20_list['tcp']['services']
+                # ['scaninfo']['tcp']['services'].split(',')
+                print(top_20)
+                # print(top20_list)
+                # pprint.pprint(port_list)
+                # port_name = port_list[0][22]['name']
+                # port_state = port_list[0][22]['state']
+                # pprint.pprint(f'{port_name} en {port_state}')
+                hosts = []
+                # # Haal de waarde van de name uit de dictionary
+                # for host_dict in hostnames:
+                #     for key, value in host_dict.items():
+                #         if key == 'name':
+                #             hosts.append(value)
+                #
+                # #  Vullen van de tabel
+                # row_number = 0
+                # # self.table_networkscan.resizeColumnsToContents()
+                # # self.table_networkscan.setStretchLastSection(True)
+                # self.table_portscan.setRowCount(len(host_list))
+                # for item in range(len(host_list)):
+                #     # print(f'{item}: {ip_list[item]}')
+                #     self.table_networkscan.setItem(row_number, 0, QTableWidgetItem(ip_list[item][0]))
+                #     self.table_networkscan.setItem(row_number, 1, QTableWidgetItem(ip_list[item][1]))
+                #     self.table_networkscan.setItem(row_number, 2, QTableWidgetItem(hosts[item]))
+                #     row_number += 1
+                self.infobox('Port scan finished')
 
 
     def hide_error_messages(self):
         self.lb_error_ip.setHidden(True)
         self.lb_error_endip.setHidden(True)
+        self.lb_error_ip_ps.setHidden(True)
+        self.lb_error_custom_port.setHidden(True)
 
 
 def main():
