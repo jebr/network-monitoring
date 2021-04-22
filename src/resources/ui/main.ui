@@ -251,7 +251,7 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QRadioButton" name="rb_1000">
+      <widget class="QRadioButton" name="rb_100">
        <property name="geometry">
         <rect>
          <x>220</x>
@@ -261,7 +261,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>1000 Known ports</string>
+        <string>100 Known ports</string>
        </property>
       </widget>
       <widget class="QRadioButton" name="rb_custom">
@@ -329,6 +329,9 @@
         <height>241</height>
        </rect>
       </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -358,7 +361,7 @@
   <tabstop>pb_start_nwscan</tabstop>
   <tabstop>line_ip_address_ps</tabstop>
   <tabstop>rb_20</tabstop>
-  <tabstop>rb_1000</tabstop>
+  <tabstop>rb_100</tabstop>
   <tabstop>rb_custom</tabstop>
   <tabstop>line_custom_port</tabstop>
   <tabstop>pb_start_pscan</tabstop>
