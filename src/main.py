@@ -66,6 +66,7 @@ def valid_ip(ip) -> bool:
     except:
         return False
 
+
 def state_scan(ip) -> bool:
     scan = nm.scan(hosts=ip, arguments='-sn')
     down = scan['nmap']['scanstats']['downhosts']
@@ -101,6 +102,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.lb_error_ip.setText("Enter a valid IP-address")
         self.lb_error_endip.setText("Enter a number between 1 and 254")
         self.lb_error_ip_ps.setText("Enter a valid IP-address")
+        # TODO: Text aanpassen naar Regex
         self.lb_error_custom_port.setText("---")
 
         self.table_networkscan.setColumnCount(3)
@@ -153,8 +155,6 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             ip_range = f'{ip_address}-{end_ip}'
             nm.scan(hosts=ip_range, arguments=f'-sn')
             all_hosts = nm.all_hosts()
-            print(type(all_hosts))
-            print(len(all_hosts))
             # Maak een lijst van devices met de status en state waarde uit de dictionary
             ip_list = [[host, nm[host]['status']['state']] for host in all_hosts]
             # Maak een lijst van devices met de hostnames en name waarde uit de dictionary
