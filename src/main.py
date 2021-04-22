@@ -113,8 +113,8 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.rb_100.toggled.connect(self.disable_custom_port_line)
         self.rb_custom.toggled.connect(self.enable_custom_port_line)
 
-        for nic in get_networkcards():
-            self.combo_networkcard.addItem(nic)
+        # for nic in get_networkcards():
+        #     self.combo_networkcard.addItem(nic)
 
     def disable_custom_port_line(self):
         self.line_custom_port.setEnabled(False)
@@ -142,17 +142,19 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
         # Tabel leeg maken voor een nieuwe scan
         self.table_networkscan.clearContents()
+        self.table_networkscan.setRowCount(0)
+        scan = {}
 
         if valid_ip(self.line_ipaddress.text()) and self.valid_endip():
             self.infobox('Port scan started...')
             ip_address = self.line_ipaddress.text()
             end_ip = self.line_end_ip.text()
-            net_card = self.combo_networkcard.currentText()
             # NMAP variables IP-address End IP-address and networkcard
             ip_range = f'{ip_address}-{end_ip}'
-
-            nm.scan(hosts=ip_range, arguments='-sn')
+            nm.scan(hosts=ip_range, arguments=f'-sn')
             all_hosts = nm.all_hosts()
+            print(type(all_hosts))
+            print(len(all_hosts))
             # Maak een lijst van devices met de status en state waarde uit de dictionary
             ip_list = [[host, nm[host]['status']['state']] for host in all_hosts]
             # Maak een lijst van devices met de hostnames en name waarde uit de dictionary
@@ -168,11 +170,8 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
             #  Vullen van de tabel
             row_number = 0
-            # self.table_networkscan.resizeColumnsToContents()
-            # self.table_networkscan.setStretchLastSection(True)
             self.table_networkscan.setRowCount(len(ip_list))
             for item in range(len(ip_list)):
-                # print(f'{item}: {ip_list[item]}')
                 self.table_networkscan.setItem(row_number, 0, QTableWidgetItem(ip_list[item][0]))
                 self.table_networkscan.setItem(row_number, 1, QTableWidgetItem(ip_list[item][1]))
                 self.table_networkscan.setItem(row_number, 2, QTableWidgetItem(hosts[item]))
@@ -195,6 +194,8 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
         # Tabel leeg maken voor een nieuwe scan
         self.table_portscan.clearContents()
+        self.table_portscan.setRowCount(0)
+        scan = {}
 
         if valid_ip(self.line_ip_address_ps.text()):
             if not state_scan(self.line_ip_address_ps.text()):
@@ -202,11 +203,9 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             else:
                 self.infobox('Port scan started...')
                 ip_address = self.line_ip_address_ps.text()
-                # TODO: nm.scan aan en variabele koppelen die geleegd wordt voordat er een nieuwe scan gestart wordt
-                nm.scan(hosts=ip_address, arguments=f'-Pn {ports}')
-                all_hosts = nm.all_hosts()
+                scan = nm.scan(hosts=ip_address, arguments=f'-Pn {ports}')
                 # Maak een lijst van devices met de gescande porten en name waarde uit de dictionary
-                port_list = [nm[host]['tcp'] for host in all_hosts]
+                port_list = [scan['scan'][ip_address]['tcp']]
                 # Maak een lijst aan met alle gescande poorten
                 scanned_ports = []
                 for port_list_dict in port_list:
@@ -214,13 +213,16 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                         scanned_ports.append(key)
                 # Vullen van de tabel
                 row_number = 0
-                self.table_portscan.setRowCount(len(scanned_ports))
+                # self.table_portscan.setRowCount(len(scanned_ports))
                 for port in scanned_ports:
+                    if port_list[0][port]['state'] == "filtered" or port_list[0][port]['state'] == "closed":
+                        continue
+                    else:
+                        self.table_portscan.insertRow(row_number)
+                        self.table_portscan.setItem(row_number, 1, QTableWidgetItem(port_list[0][port]['state']))
                     self.table_portscan.setItem(row_number, 0, QTableWidgetItem(str(port)))
-                    self.table_portscan.setItem(row_number, 1, QTableWidgetItem(port_list[0][port]['state']))
                     self.table_portscan.setItem(row_number, 2, QTableWidgetItem(port_list[0][port]['name']))
                     row_number += 1
-
                 self.infobox('Port scan finished')
 
     def hide_error_messages(self):
