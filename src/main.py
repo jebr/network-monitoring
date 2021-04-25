@@ -204,12 +204,12 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                     continue
                 else:
                     ports_list.append(port)
-            # Controleer of de ingevoerde waarde niet groter is dan 65535
+            # Controleer of de ingevoerde waarde tussen 1 en 65535 is
             for i in ports_list:
-                i = int(i)
-                if i > 65535:
-                    self.criticalbox("Port not valid\nMax port value 65535")
+                if (int(i) < 1) or (int(i) > 65535):
+                    self.criticalbox("Port not valid\nPort value between 1 and 65535")
                     ports_are_valid = False
+                    break
 
         # Maak van de lijst een string om deze te kunnen gebruiken in de portscan
         custom_ports = ' '.join(ports_list)
