@@ -1,5 +1,9 @@
-# network-monitoring
-Network monitoring tool (network sniffer, ping detect, networkscan)
+# Linux Network Monitoring
+Linux Netwerk monitoring tool (netwerk scanner, port scanner, ping detector)
+
+Deze applicatie is gemaakt om te werken op Linux Ubuntu
+
+## Demo / Preview
 
 
 ## Development
