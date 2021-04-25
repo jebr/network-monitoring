@@ -4,6 +4,10 @@ Linux Netwerk monitoring tool (netwerk scanner, port scanner, ping detector)
 Deze applicatie is gemaakt om te werken op Linux Ubuntu
 
 ## Demo / Preview
+[![Screenshot](https://github.com/jebr/network-monitoring/blob/main/docs/readme-docs/network-monitoring-v1.0.png "Network Monitoring Screenshot")](https://github.com/jebr/network-monitoring/releases/)
+
+## Documenatie
+[Documentatie](https://switchit.me/network-monitoring)
 
 
 ## Development
