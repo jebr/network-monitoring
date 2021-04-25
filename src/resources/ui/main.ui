@@ -35,8 +35,8 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>591</width>
-        <height>121</height>
+        <width>589</width>
+        <height>131</height>
        </rect>
       </property>
       <property name="title">
@@ -45,8 +45,8 @@
       <widget class="QLineEdit" name="line_ipaddress">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>40</y>
+         <x>20</x>
+         <y>50</y>
          <width>131</width>
          <height>20</height>
         </rect>
@@ -55,21 +55,11 @@
         <number>15</number>
        </property>
       </widget>
-      <widget class="QComboBox" name="combo_networkcard">
-       <property name="geometry">
-        <rect>
-         <x>320</x>
-         <y>40</y>
-         <width>261</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="lb_start_ip">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>20</y>
+         <x>20</x>
+         <y>30</y>
          <width>101</width>
          <height>16</height>
         </rect>
@@ -81,8 +71,8 @@
       <widget class="QLabel" name="lb_ip_end">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>20</y>
+         <x>180</x>
+         <y>30</y>
          <width>81</width>
          <height>20</height>
         </rect>
@@ -91,24 +81,11 @@
         <string>End</string>
        </property>
       </widget>
-      <widget class="QLabel" name="lb_networkcard">
-       <property name="geometry">
-        <rect>
-         <x>320</x>
-         <y>20</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Networkcard</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="line_end_ip">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>40</y>
+         <x>180</x>
+         <y>50</y>
          <width>51</width>
          <height>20</height>
         </rect>
@@ -123,8 +100,8 @@
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>150</x>
-         <y>40</y>
+         <x>160</x>
+         <y>50</y>
          <width>21</width>
          <height>17</height>
         </rect>
@@ -136,10 +113,10 @@
       <widget class="QPushButton" name="pb_start_nwscan">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>131</width>
-         <height>25</height>
+         <x>260</x>
+         <y>30</y>
+         <width>121</width>
+         <height>61</height>
         </rect>
        </property>
        <property name="text">
@@ -147,32 +124,6 @@
        </property>
        <property name="shortcut">
         <string>Return</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lb_error_ip">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>161</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_ip</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lb_error_endip">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>70</y>
-         <width>311</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_endip</string>
        </property>
       </widget>
      </widget>
@@ -189,7 +140,7 @@
        <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -203,7 +154,7 @@
         <x>10</x>
         <y>10</y>
         <width>601</width>
-        <height>141</height>
+        <height>151</height>
        </rect>
       </property>
       <property name="title">
@@ -223,19 +174,22 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>100</y>
+         <y>90</y>
          <width>111</width>
-         <height>25</height>
+         <height>51</height>
         </rect>
        </property>
        <property name="text">
         <string>Scan</string>
        </property>
+       <property name="shortcut">
+        <string/>
+       </property>
       </widget>
       <widget class="QRadioButton" name="rb_20">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>220</x>
          <y>30</y>
          <width>161</width>
          <height>23</height>
@@ -248,23 +202,23 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QRadioButton" name="rb_1000">
+      <widget class="QRadioButton" name="rb_100">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>220</x>
          <y>60</y>
          <width>181</width>
          <height>23</height>
         </rect>
        </property>
        <property name="text">
-        <string>1000 Known ports</string>
+        <string>100 Known ports</string>
        </property>
       </widget>
       <widget class="QRadioButton" name="rb_custom">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>220</x>
          <y>90</y>
          <width>151</width>
          <height>23</height>
@@ -274,26 +228,13 @@
         <string>Custom port</string>
        </property>
       </widget>
-      <widget class="QLabel" name="lb_error_ip_ps">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>60</y>
-         <width>111</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_ip_ps</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="line_custom_port">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
-         <x>290</x>
+         <x>360</x>
          <y>90</y>
          <width>113</width>
          <height>25</height>
@@ -303,28 +244,18 @@
         <bool>false</bool>
        </property>
       </widget>
-      <widget class="QLabel" name="lb_error_custom_port">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>120</y>
-         <width>111</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_ip_ps</string>
-       </property>
-      </widget>
      </widget>
-     <widget class="QTableView" name="table_portscan">
+     <widget class="QTableWidget" name="table_portscan">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>160</y>
+        <y>170</y>
         <width>601</width>
         <height>231</height>
        </rect>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -351,16 +282,14 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>line_ipaddress</tabstop>
   <tabstop>line_end_ip</tabstop>
-  <tabstop>combo_networkcard</tabstop>
   <tabstop>pb_start_nwscan</tabstop>
   <tabstop>line_ip_address_ps</tabstop>
   <tabstop>rb_20</tabstop>
-  <tabstop>rb_1000</tabstop>
+  <tabstop>rb_100</tabstop>
   <tabstop>rb_custom</tabstop>
   <tabstop>line_custom_port</tabstop>
   <tabstop>pb_start_pscan</tabstop>
   <tabstop>table_networkscan</tabstop>
-  <tabstop>table_portscan</tabstop>
  </tabstops>
  <resources/>
  <connections/>
