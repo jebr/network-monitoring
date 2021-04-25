@@ -5,6 +5,7 @@ import ipaddress
 import threading
 import nmap
 import pprint
+import re
 
 # PyQT modules
 from PyQt5.QtCore import QDateTime
@@ -29,7 +30,7 @@ def resource_path(relative_path):
 
 # External files
 ui_main_window = resource_path('resources/ui/main.ui')
-icon_window = ""
+icon_window = resource_path('icons/network-icon.ico')
 
 # Software version
 current_version = float(1.0)
@@ -67,6 +68,25 @@ def valid_ip(ip) -> bool:
         return False
 
 
+def valid_endip(endip) -> bool:
+    try:
+        number = int(endip)
+        if 0 < number <= 254:
+            return True
+    except:
+        return False
+
+
+def valid_port_list(ports) -> bool:
+    # Regex om de input te controleren
+    pattern = re.compile(r'[\d,-]+')
+    # Check op fullmatch met pattern
+    matches = pattern.fullmatch(ports)
+    if matches:
+        return True
+    else:
+        return False
+
 def state_scan(ip) -> bool:
     scan = nm.scan(hosts=ip, arguments='-sn')
     down = scan['nmap']['scanstats']['downhosts']
@@ -91,20 +111,6 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.pb_start_nwscan.clicked.connect(self.start_nwscan)
         self.pb_start_pscan.clicked.connect(self.start_pscan)
 
-        self.lb_error_ip.setHidden(True)
-        self.lb_error_endip.setHidden(True)
-        self.lb_error_ip_ps.setHidden(True)
-        self.lb_error_custom_port.setHidden(True)
-        self.lb_error_ip.setStyleSheet("color: red")
-        self.lb_error_endip.setStyleSheet("color: red")
-        self.lb_error_ip_ps.setStyleSheet("color: red")
-        self.lb_error_custom_port.setStyleSheet("color: red")
-        self.lb_error_ip.setText("Enter a valid IP-address")
-        self.lb_error_endip.setText("Enter a number between 1 and 254")
-        self.lb_error_ip_ps.setText("Enter a valid IP-address")
-        # TODO: Text aanpassen naar Regex
-        self.lb_error_custom_port.setText("---")
-
         self.table_networkscan.setColumnCount(3)
         self.table_portscan.setColumnCount(3)
         self.table_networkscan.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
@@ -124,31 +130,20 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def enable_custom_port_line(self):
         self.line_custom_port.setEnabled(True)
 
-    def valid_endip(self) -> bool:
-        try:
-            int(self.line_end_ip.text())
-            ip = int(self.line_end_ip.text())
-            if 0 < ip <= 254:
-                return True
-        except:
-            self.lb_error_endip.setHidden(False)
-            start_time = threading.Timer(3, self.hide_error_messages)
-            start_time.start()
-            return False
-
     def start_nwscan(self):
         if not valid_ip(self.line_ipaddress.text()):
-            self.lb_error_ip.setHidden(False)
-            start_time = threading.Timer(3, self.hide_error_messages)
-            start_time.start()
+            self.criticalbox('Enter a valid IP address')
+
+        if not valid_endip(self.line_end_ip.text()):
+            self.criticalbox('Enter a number between 1 and 254')
 
         # Tabel leeg maken voor een nieuwe scan
         self.table_networkscan.clearContents()
         self.table_networkscan.setRowCount(0)
         scan = {}
 
-        if valid_ip(self.line_ipaddress.text()) and self.valid_endip():
-            self.infobox('Port scan started...')
+        if valid_ip(self.line_ipaddress.text()) and valid_endip(self.line_end_ip.text()):
+            self.infobox('Network scan started...')
             ip_address = self.line_ipaddress.text()
             end_ip = self.line_end_ip.text()
             # NMAP variables IP-address End IP-address and networkcard
@@ -176,13 +171,48 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                 self.table_networkscan.setItem(row_number, 1, QTableWidgetItem(ip_list[item][1]))
                 self.table_networkscan.setItem(row_number, 2, QTableWidgetItem(hosts[item]))
                 row_number += 1
-            self.infobox('Port scan finished')
+            self.infobox('Network scan finished')
 
     def start_pscan(self):
+        temp_port_list = []
+        ports_list = []
+        ports_are_valid = False
+        ports = self.line_custom_port.text()
+
         if not valid_ip(self.line_ip_address_ps.text()):
-            self.lb_error_ip_ps.setHidden(False)
-            start_time = threading.Timer(3, self.hide_error_messages)
-            start_time.start()
+            self.criticalbox('Enter a valid IP address')
+
+        if not valid_port_list(ports) and self.rb_custom.isChecked():
+            self.criticalbox('Invalid input\ne.g. 80,80,21\ne.g. 8080-8085')
+
+        if not self.rb_custom.isChecked():
+            ports_are_valid = True
+
+        # Controleer of de match True is
+        if valid_port_list(ports):
+            ports_are_valid = True
+            # Controleer of de poortlijst een - of , bevat
+            if ',' in ports:
+                temp_port_list = ports.split(",")
+            if '-' in ports:
+                temp_port_list = ports.split("-")
+            else:
+                temp_port_list.append(ports)
+            # Verwijder lege items uit de lijst
+            for port in temp_port_list:
+                if port == "":
+                    continue
+                else:
+                    ports_list.append(port)
+            # Controleer of de ingevoerde waarde niet groter is dan 65535
+            for i in ports_list:
+                i = int(i)
+                if i > 65535:
+                    self.criticalbox("Port not valid\nMax port value 65535")
+                    ports_are_valid = False
+
+        # Maak van de lijst een string om deze te kunnen gebruiken in de portscan
+        custom_ports = ' '.join(ports_list)
 
         if self.rb_20.isChecked():
             ports = '--top-ports 20'
@@ -190,14 +220,14 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         if self.rb_100.isChecked():
             ports = '--top-ports 100'
         if self.rb_custom.isChecked():
-            ports = f'-p {self.line_custom_port.text()}'
+            ports = f'-p {custom_ports}'
 
         # Tabel leeg maken voor een nieuwe scan
         self.table_portscan.clearContents()
         self.table_portscan.setRowCount(0)
         scan = {}
 
-        if valid_ip(self.line_ip_address_ps.text()):
+        if valid_ip(self.line_ip_address_ps.text()) and ports_are_valid:
             if not state_scan(self.line_ip_address_ps.text()):
                 self.criticalbox('The host appears to be offline')
             else:
@@ -224,12 +254,6 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                     self.table_portscan.setItem(row_number, 2, QTableWidgetItem(port_list[0][port]['name']))
                     row_number += 1
                 self.infobox('Port scan finished')
-
-    def hide_error_messages(self):
-        self.lb_error_ip.setHidden(True)
-        self.lb_error_endip.setHidden(True)
-        self.lb_error_ip_ps.setHidden(True)
-        self.lb_error_custom_port.setHidden(True)
 
 
 def main():

@@ -110,32 +110,6 @@
         <string>-</string>
        </property>
       </widget>
-      <widget class="QLabel" name="lb_error_ip">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>110</y>
-         <width>161</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_ip</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lb_error_endip">
-       <property name="geometry">
-        <rect>
-         <x>180</x>
-         <y>110</y>
-         <width>311</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_endip</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="pb_start_nwscan">
        <property name="geometry">
         <rect>
@@ -254,19 +228,6 @@
         <string>Custom port</string>
        </property>
       </widget>
-      <widget class="QLabel" name="lb_error_ip_ps">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>60</y>
-         <width>181</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_ip_ps</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="line_custom_port">
        <property name="enabled">
         <bool>false</bool>
@@ -281,19 +242,6 @@
        </property>
        <property name="readOnly">
         <bool>false</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="lb_error_custom_port">
-       <property name="geometry">
-        <rect>
-         <x>360</x>
-         <y>120</y>
-         <width>111</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lb_error_ip_ps</string>
        </property>
       </widget>
      </widget>
