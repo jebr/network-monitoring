@@ -183,7 +183,7 @@
         <string>Scan</string>
        </property>
        <property name="shortcut">
-        <string/>
+        <string>Return</string>
        </property>
       </widget>
       <widget class="QRadioButton" name="rb_20">
