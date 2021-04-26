@@ -190,13 +190,18 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
         # Controleer of de match True is
         if valid_port_list(ports):
-            ports_are_valid = True
             # Controleer of de poortlijst een - of , bevat
-            if ',' in ports:
+            if '-' in ports and ',' in ports:
+                ports_are_valid = False
+                self.criticalbox('Invalid input\ne.g. 80,80,21\ne.g. 8080-8085')
+            elif ',' in ports:
+                ports_are_valid = True
                 temp_port_list = ports.split(",")
-            if '-' in ports:
+            elif '-' in ports:
+                ports_are_valid = True
                 temp_port_list = ports.split("-")
             else:
+                ports_are_valid = True
                 temp_port_list.append(ports)
             # Verwijder lege items uit de lijst
             for port in temp_port_list:
