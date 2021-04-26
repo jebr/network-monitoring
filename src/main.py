@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 import os
 import subprocess
@@ -30,7 +31,10 @@ def resource_path(relative_path):
 
 # External files
 ui_main_window = resource_path('resources/ui/main.ui')
+ui_top20_window = resource_path('resources/ui/20_known_ports.ui')
+ui_top100_window = resource_path('resources/ui/100_known_ports.ui')
 icon_window = resource_path('icons/network-icon.ico')
+icon_circle_info = resource_path('icons/circle-info.png')
 
 # Software version
 current_version = float(1.0)
@@ -125,6 +129,11 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.rb_100.toggled.connect(self.disable_custom_port_line)
         self.rb_custom.toggled.connect(self.enable_custom_port_line)
 
+        self.pb_known_20.clicked.connect(self.open_top20_window)
+        self.pb_known_100.clicked.connect(self.open_top100_window)
+        self.pb_known_20.setIcon(QIcon(QPixmap(icon_circle_info)))
+        self.pb_known_100.setIcon(QIcon(QPixmap(icon_circle_info)))
+
         # for nic in get_networkcards():
         #     self.combo_networkcard.addItem(nic)
 
@@ -152,7 +161,10 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             end_ip = self.line_end_ip.text()
             # NMAP variables IP-address End IP-address and networkcard
             ip_range = f'{ip_address}-{end_ip}'
-            nm.scan(hosts=ip_range, arguments=f'-sn')
+            try:
+                nm.scan(hosts=ip_range, arguments=f'-sn')
+            except Exception:
+                self.criticalbox('An unexpected error has occurred')
             all_hosts = nm.all_hosts()
             # Maak een lijst van devices met de status en state waarde uit de dictionary
             ip_list = [[host, nm[host]['status']['state']] for host in all_hosts]
@@ -180,8 +192,10 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def start_pscan(self):
         temp_port_list = []
         ports_list = []
+        custom_ports = ""
         ports_are_valid = False
         ports = self.line_custom_port.text()
+        counter = 0
 
         if not valid_ip(self.line_ip_address_ps.text()):
             self.criticalbox('Enter a valid IP address')
@@ -202,17 +216,19 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                 ports_are_valid = True
                 temp_port_list = ports.split(",")
             elif '-' in ports:
-                ports_are_valid = True
-                temp_port_list = ports.split("-")
+                for i in ports:
+                    if i == "-":
+                        counter += 1
+                if counter > 1:
+                    ports_are_valid = False
+                    self.criticalbox('Invalid input\ne.g. 80,80,21\ne.g. 8080-8085')
+                else:
+                    ports_are_valid = True
+                    ports_list = ports.split("-")
             else:
                 ports_are_valid = True
                 temp_port_list.append(ports)
-            # Verwijder lege items uit de lijst
-            for port in temp_port_list:
-                if port == "":
-                    continue
-                else:
-                    ports_list.append(port)
+
             # Controleer of de ingevoerde waarde tussen 1 en 65535 is
             for i in ports_list:
                 if (int(i) < 1) or (int(i) > 65535):
@@ -220,8 +236,17 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                     ports_are_valid = False
                     break
 
-        # Maak van de lijst een string om deze te kunnen gebruiken in de portscan
-        custom_ports = ' '.join(ports_list)
+            if "-" not in ports:
+                # Verwijder lege items uit de lijst
+                for port in temp_port_list:
+                    if port == "":
+                        continue
+                    else:
+                        ports_list.append(port)
+                # Maak van de lijst een string om deze te kunnen gebruiken in de portscan
+                custom_ports = ','.join(ports_list)
+            else:
+                custom_ports = ports
 
         if self.rb_20.isChecked():
             ports = '--top-ports 20'
@@ -246,13 +271,19 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                     scan = nm.scan(hosts=ip_address, arguments=f'-Pn {ports}')
                 except Exception:
                     self.criticalbox('An unexpected error has occurred')
-                # Maak een lijst van devices met de gescande porten en name waarde uit de dictionary
-                port_list = [scan['scan'][ip_address]['tcp']]
-                # Maak een lijst aan met alle gescande poorten
+
                 scanned_ports = []
-                for port_list_dict in port_list:
-                    for key, value in port_list_dict.items():
-                        scanned_ports.append(key)
+                port_list = []
+                # Maak een lijst van devices met de gescande porten en name waarde uit de dictionary
+                try:
+                    port_list = [scan['scan'][ip_address]['tcp']]
+                    # Maak een lijst aan met alle gescande poorten
+                    for port_list_dict in port_list:
+                        for key, value in port_list_dict.items():
+                            scanned_ports.append(key)
+                except:
+                    scanned_ports = []
+
                 # Vullen van de tabel
                 row_number = 0
                 # self.table_portscan.setRowCount(len(scanned_ports))
@@ -267,6 +298,29 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
                     row_number += 1
                 self.infobox('Port scan finished')
 
+    def open_top20_window(self):
+        info_window_ = Top20Window()
+        info_window_.exec_()
+
+    def open_top100_window(self):
+        info_window_ = Top100Window()
+        info_window_.exec_()
+
+
+class Top20Window(QDialog):
+    def __init__(self):
+        super().__init__(None, QtCore.Qt.WindowCloseButtonHint)
+        self.setFixedSize(240, 320)
+        loadUi(ui_top20_window, self)
+        self.setWindowIcon(QtGui.QIcon(icon_window))
+
+
+class Top100Window(QDialog):
+    def __init__(self):
+        super().__init__(None, QtCore.Qt.WindowCloseButtonHint)
+        self.setFixedSize(240, 320)
+        loadUi(ui_top100_window, self)
+        self.setWindowIcon(QtGui.QIcon(icon_window))
 
 def main():
     app = QApplication(sys.argv)
