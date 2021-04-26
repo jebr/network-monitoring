@@ -87,13 +87,17 @@ def valid_port_list(ports) -> bool:
     else:
         return False
 
+
 def state_scan(ip) -> bool:
-    scan = nm.scan(hosts=ip, arguments='-sn')
-    down = scan['nmap']['scanstats']['downhosts']
-    if down == '1':
+    try:
+        scan = nm.scan(hosts=ip, arguments='-sn')
+        down = scan['nmap']['scanstats']['downhosts']
+        if down == '1':
+            return False
+        else:
+            return True
+    except Exception:
         return False
-    else:
-        return True
 
 
 nm = nmap.PortScanner()
@@ -238,7 +242,10 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             else:
                 self.infobox('Port scan started...')
                 ip_address = self.line_ip_address_ps.text()
-                scan = nm.scan(hosts=ip_address, arguments=f'-Pn {ports}')
+                try:
+                    scan = nm.scan(hosts=ip_address, arguments=f'-Pn {ports}')
+                except Exception:
+                    self.criticalbox('An unexpected error has occurred')
                 # Maak een lijst van devices met de gescande porten en name waarde uit de dictionary
                 port_list = [scan['scan'][ip_address]['tcp']]
                 # Maak een lijst aan met alle gescande poorten
