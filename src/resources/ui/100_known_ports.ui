@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>240</width>
+    <height>320</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Top 100 Ports</string>
+  </property>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>181</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>17</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Top 100 Ports</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>221</width>
+     <height>261</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>7</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>9</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>13</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>21</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>22</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>23</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>25</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>26</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>37</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>53</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>79</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>80</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>81</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>88</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>106</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>110</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>111</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>113</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>119</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>135</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>139</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>143</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>144</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>179</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>199</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>389</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>427</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>443</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>444</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>445</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>465</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>513</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>514</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>515</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>543</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>544</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>548</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>554</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>587</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>631</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>646</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>873</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>990</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>993</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>995</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1025</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1026</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1027</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1028</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1029</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1110</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1433</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1720</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1723</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1755</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>1900</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2000</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2001</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2049</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2121</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2717</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>3000</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>3128</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>3306</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>3389</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>3986</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>4899</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5000</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5009</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5051</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5060</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5101</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5190</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5357</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5432</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5631</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5666</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5800</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>5900</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>6000</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>6001</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>6646</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>7070</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8000</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8008</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8009</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8080</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8081</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8443</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>8888</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>9100</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>9999</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>10000</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>32768</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>49152</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>49153</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>49154</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>49155</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>49156</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>49157</string>
+    </property>
+   </item>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
