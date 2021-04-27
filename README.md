@@ -1,3 +1,7 @@
+<p align="center">
+  <img alt="Logo" src="https://raw.githubusercontent.com/jebr/network-monitoring/main/docs/readme-docs/network-monitoring.png">
+</p>
+
 # Linux Network Monitoring
 Linux Netwerk monitoring tool (netwerk scanner, port scanner, ping detector)
 
