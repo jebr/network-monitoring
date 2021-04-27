@@ -7,6 +7,7 @@ import threading
 import nmap
 import pprint
 import re
+import netifaces
 
 # PyQT modules
 from PyQt5.QtCore import QDateTime
@@ -35,6 +36,7 @@ ui_top20_window = resource_path('resources/ui/20_known_ports.ui')
 ui_top100_window = resource_path('resources/ui/100_known_ports.ui')
 icon_window = resource_path('icons/network-icon.ico')
 icon_circle_info = resource_path('icons/circle-info.png')
+comming_soon_img = resource_path('icons/comming-soon.jpg')
 
 # Software version
 current_version = float(1.0)
@@ -61,6 +63,11 @@ class BaseWindow:
 def get_networkcards() -> list:
     nics = subprocess.check_output(['ls', '/sys/class/net']).strip().decode()
     nics = nics.split("\n")
+    return nics
+
+
+def get_networkcards_new() -> list:
+    nics = netifaces.interfaces()
     return nics
 
 
@@ -133,9 +140,23 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.pb_known_100.clicked.connect(self.open_top100_window)
         self.pb_known_20.setIcon(QIcon(QPixmap(icon_circle_info)))
         self.pb_known_100.setIcon(QIcon(QPixmap(icon_circle_info)))
+        pixmap = QPixmap(comming_soon_img)
+        self.lb_comming_soon.setPixmap(pixmap)
 
-        # for nic in get_networkcards():
-        #     self.combo_networkcard.addItem(nic)
+        for nic in get_networkcards_new():
+            self.combo_networkcard.addItem(nic)
+
+        self.combo_networkcard.currentIndexChanged.connect(self.get_network_data)
+
+    def get_network_data(self):
+        self.list_network_data.clear()
+        nic = self.combo_networkcard.currentText()
+        data = netifaces.ifaddresses(nic)
+        gateways = netifaces.gateways()
+        self.list_network_data.addItem(f'IP address: {data[netifaces.AF_INET][0]["addr"]}')
+        self.list_network_data.addItem(f'IP Netmask: {data[netifaces.AF_INET][0]["netmask"]}')
+        self.list_network_data.addItem(f'Default gateway: {gateways["default"][netifaces.AF_INET][0]} '
+                                       f'({gateways["default"][netifaces.AF_INET][1]})')
 
     def disable_custom_port_line(self):
         self.line_custom_port.setEnabled(False)
