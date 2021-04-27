@@ -17,8 +17,6 @@ het dropdown menu, de gegeves zullen in het veld eronde zichtbaar worden.
    De netwerkscan zal worden uitgevoerd op de netwerkkaart waar de default gateway op is ingesteld. 
 
 
-.. image:: images/network-monitoring-v1.0.png
-   :width: 600px
-   :height: 400px
+.. image:: images/networkscan.png
    :scale: 100%
    :align: center

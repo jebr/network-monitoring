@@ -30,7 +30,7 @@ programma zijn de volgende:
 
 Downloaden en starten
 ---------------------
-Het programma is ontwikkeld om te kunnen gebruiken op Linux Ubuntu. Het programma kan gedownload worden via deze 
+Het programma is ontwikkeld om te kunnen gebruiken op **Linux Ubuntu**. Het programma kan gedownload worden via deze 
 `koppeling <https://github.com/jebr/network-monitoring/releases/download/v1.0/network-monitoring>`_.
 
 Volg de onderstaande stappen om het programma te starten:
