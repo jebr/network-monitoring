@@ -26,7 +26,7 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="network_scan_tab">
      <attribute name="title">
       <string>Network Scanner</string>
      </attribute>
@@ -36,7 +36,7 @@
         <x>10</x>
         <y>10</y>
         <width>589</width>
-        <height>131</height>
+        <height>161</height>
        </rect>
       </property>
       <property name="title">
@@ -113,10 +113,10 @@
       <widget class="QPushButton" name="pb_start_nwscan">
        <property name="geometry">
         <rect>
-         <x>260</x>
-         <y>30</y>
-         <width>121</width>
-         <height>61</height>
+         <x>20</x>
+         <y>90</y>
+         <width>101</width>
+         <height>51</height>
         </rect>
        </property>
        <property name="text">
@@ -126,14 +126,60 @@
         <string>Return</string>
        </property>
       </widget>
+      <widget class="QListWidget" name="list_network_data">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>80</y>
+         <width>311</width>
+         <height>61</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="combo_networkcard">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>50</y>
+         <width>311</width>
+         <height>25</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>30</y>
+         <width>141</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>NIC Information</string>
+       </property>
+      </widget>
+      <widget class="Line" name="line">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>30</y>
+         <width>20</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
      </widget>
      <widget class="QTableWidget" name="table_networkscan">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>150</y>
+        <y>180</y>
         <width>601</width>
-        <height>251</height>
+        <height>221</height>
        </rect>
       </property>
       <property name="sizeAdjustPolicy">
@@ -144,7 +190,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="port_scan_tab">
      <attribute name="title">
       <string>Port Scanner</string>
      </attribute>
@@ -291,10 +337,26 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="ping_detect_tab">
      <attribute name="title">
       <string>Ping Detector</string>
      </attribute>
+     <widget class="QLabel" name="lb_comming_soon">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>611</width>
+        <height>371</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
