@@ -61,12 +61,6 @@ class BaseWindow:
 
 
 def get_networkcards() -> list:
-    nics = subprocess.check_output(['ls', '/sys/class/net']).strip().decode()
-    nics = nics.split("\n")
-    return nics
-
-
-def get_networkcards_new() -> list:
     nics = netifaces.interfaces()
     return nics
 
@@ -143,7 +137,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         pixmap = QPixmap(comming_soon_img)
         self.lb_comming_soon.setPixmap(pixmap)
 
-        for nic in get_networkcards_new():
+        for nic in get_networkcards():
             self.combo_networkcard.addItem(nic)
 
         self.combo_networkcard.currentIndexChanged.connect(self.get_network_data)
