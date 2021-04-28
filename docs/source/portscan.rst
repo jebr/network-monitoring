@@ -8,9 +8,9 @@ Selecteer vervolgens een optie om de poortscan te starten. Er zijn drie opties b
 * 100 meest gebruikte poorten
 * Vrij te kiezen poorten
 
-Een overzicht van de 20 meest gebruikte poorten is :ref:`hier <20-known-ports>` terug te vinden. Een overzicht van de 100 meest gebruikte poorten is :ref:`hier <100-known-ports>` terug te vinden.
+Een overzicht van de meest gebruikte poorten is :ref:`hier <top-ports>` terug te vinden.
 
-Waneer de **Scan** knop wordt ingedrukt zal de scan gestart worden met de gekozen optie. In de weergave zullen allen openstaande poorten worden weergegeven. Wanneer een poort op een host gesloten is zal deze niet worden weergegeven in de scanlijst.
+Waneer de **Scan** knop wordt ingedrukt zal de scan gestart worden met de gekozen optie. In de weergave zullen alleen de openstaande poorten worden weergegeven. Wanneer een poort op een host gesloten is zal deze niet worden weergegeven in de scanlijst.
 
 Voor de vrij te kiezen poort zijn de volgende manieren voor invoeren toegestaan:
 

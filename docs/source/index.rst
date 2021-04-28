@@ -50,6 +50,7 @@ Beschrijving programma onderdelen
 * :doc:`networkscan`
 * :doc:`portscan`
 * :doc:`pingdetector`
+* :doc:`topports`
 
 
 .. toctree::
@@ -60,4 +61,5 @@ Beschrijving programma onderdelen
    networkscan.rst
    portscan.rst
    pingdetector.rst
+   topports.rst
 
