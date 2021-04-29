@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import os
-import subprocess
 import ipaddress
-import threading
 import nmap
-import pprint
 import re
 import netifaces
 
@@ -95,6 +92,7 @@ def valid_port_list(ports) -> bool:
 
 def state_scan(ip) -> bool:
     try:
+        nm = nmap.PortScanner()
         scan = nm.scan(hosts=ip, arguments='-sn')
         down = scan['nmap']['scanstats']['downhosts']
         if down == '1':
@@ -103,9 +101,6 @@ def state_scan(ip) -> bool:
             return True
     except Exception:
         return False
-
-
-nm = nmap.PortScanner()
 
 
 class MainPage(QtWidgets.QMainWindow, BaseWindow):
@@ -142,6 +137,13 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
         self.combo_networkcard.currentIndexChanged.connect(self.get_network_data)
 
+        # Define Nmap
+        try:
+            nm = nmap.PortScanner()
+        except:
+            sys.exit(self.criticalbox("To use this application NMAP is required!\n\n"
+                                      "sudo apt install nmap -yy"))
+
     def get_network_data(self):
         self.list_network_data.clear()
         nic = self.combo_networkcard.currentText()
@@ -159,6 +161,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.line_custom_port.setEnabled(True)
 
     def start_nwscan(self):
+        nm = nmap.PortScanner()
         if not valid_ip(self.line_ipaddress.text()):
             self.criticalbox('Enter a valid IP address')
 
@@ -205,6 +208,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             self.infobox('Network scan finished')
 
     def start_pscan(self):
+        nm = nmap.PortScanner()
         temp_port_list = []
         ports_list = []
         custom_ports = ""
@@ -337,6 +341,7 @@ class Top100Window(QDialog):
         loadUi(ui_top100_window, self)
         self.setWindowIcon(QtGui.QIcon(icon_window))
 
+
 def main():
     app = QApplication(sys.argv)
     widget = MainPage()
@@ -346,6 +351,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
