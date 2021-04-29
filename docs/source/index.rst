@@ -3,6 +3,12 @@
 
 Network Monitoring Documentatie
 ==============================================
+
+.. warning::
+
+   Om dit programma te kunnen gebruiken moet NMAP geïnstalleerd zijn op de pc. Installeren van NMAP kan met 
+   het commando ``sudo apt install nmap -yy``
+
 Het network monitoring programma kan gebruikt worden voor de volgende taken:
 
 * Scannen van apparaten in een netwerk
