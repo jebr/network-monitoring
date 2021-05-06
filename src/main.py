@@ -5,6 +5,8 @@ import ipaddress
 import nmap
 import re
 import netifaces
+from scapy.all import *
+from scapy.layers.http import HTTPRequest  # import HTTP packet
 
 # PyQT modules
 from PyQt5.QtCore import QDateTime
@@ -111,24 +113,25 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.setWindowIcon(QtGui.QIcon(icon_window))
         # self.actionVersion.setText(f'Versie v{current_version}')
         self.setWindowTitle("Network Monitoring")
-
+        # Portscan elements
         self.pb_start_nwscan.clicked.connect(self.start_nwscan)
         self.pb_start_pscan.clicked.connect(self.start_pscan)
-
+        # Table elements
         self.table_networkscan.setColumnCount(3)
         self.table_portscan.setColumnCount(3)
         self.table_networkscan.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.table_portscan.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.table_networkscan.setHorizontalHeaderLabels(["IP-address", "Up/Down", "Hostname"])
         self.table_portscan.setHorizontalHeaderLabels(["Port", "State", "Service Name"])
+        # Networkscan elements
         self.rb_20.toggled.connect(self.disable_custom_port_line)
         self.rb_100.toggled.connect(self.disable_custom_port_line)
         self.rb_custom.toggled.connect(self.enable_custom_port_line)
-
         self.pb_known_20.clicked.connect(self.open_top20_window)
         self.pb_known_100.clicked.connect(self.open_top100_window)
         self.pb_known_20.setIcon(QIcon(QPixmap(icon_circle_info)))
         self.pb_known_100.setIcon(QIcon(QPixmap(icon_circle_info)))
+        # Comming soon Ping detector
         pixmap = QPixmap(comming_soon_img)
         self.lb_comming_soon.setPixmap(pixmap)
 
