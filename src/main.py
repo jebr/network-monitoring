@@ -5,6 +5,7 @@ import ipaddress
 import nmap
 import re
 import netifaces
+import datetime
 from scapy.all import *
 from scapy.layers.http import HTTPRequest  # import HTTP packet
 
@@ -191,17 +192,18 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         while True:
             reply = sock.receive(None, 2000)
 
+            date = datetime.fromtimestamp(int(reply.time))
+
             # Add listen entry to table
             self.ping_results_table.insertRow(row)
             self.ping_results_table.setItem(row, 0, QTableWidgetItem(reply.source))
-            self.ping_results_table.setItem(row, 1, QTableWidgetItem(str(reply.type)))
-            self.ping_results_table.setItem(row, 2, QTableWidgetItem(str(reply.time)))
+            self.ping_results_table.setItem(row, 1, QTableWidgetItem(self.lookup_icmp_type(reply.type)))
+            self.ping_results_table.setItem(row, 2, QTableWidgetItem(str(date)))
 
             # Debug terminal output
-            print(reply.source + " (" + str(reply.type) + ") @" + str(reply.time))
+            print(reply.source + " (" + self.lookup_icmp_type(reply.type) + ") @" + str(date))
 
-            # 192.168.10.118 (8) @1621035549.1015074
-            # 192.168.10.118 (8) @1621035550.1064825
+            print(type(reply.time))
 
             if stop_ping:
                 print("Stop button pushed")
@@ -209,6 +211,30 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
             row += 1
         print("Thread stopped")
+
+    # Table with all non-deprecated and non-reserved ICMP types
+    # https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+    def lookup_icmp_type(self, icmp_type):
+        types = {
+            0: "Echo Reply",
+            3: "Destination Unreachable",
+            5: "Redirect",
+            8: "Echo",
+            9: "Router Advertisement",
+            10: "Router Selection",
+            11: "Time Exceeded",
+            12: "Parameter Problem",
+            13: "Timestamp",
+            14: "Timestamp Reply",
+            40: "Photuris",
+            42: "Extended Echo Request",
+            43: "Extended Echo Reply"
+        }
+
+        if int(icmp_type) in types:
+            return types[int(icmp_type)]
+        else:
+            return "Unknown ICMP type (" + str(icmp_type) + ")"
 
     def get_network_data(self):
         self.list_network_data.clear()
