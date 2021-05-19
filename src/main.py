@@ -149,7 +149,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.pb_known_100.clicked.connect(self.open_top100_window)
         self.pb_known_20.setIcon(QIcon(QPixmap(icon_circle_info)))
         self.pb_known_100.setIcon(QIcon(QPixmap(icon_circle_info)))
-        # Comming soon Ping detector
+        # Ping detector
         self.ping_listen_button_start.clicked.connect(self.start_ping_scan)
         self.ping_listen_button_stop.clicked.connect(self.stop_ping_scan)
         self.ping_results_table.setColumnCount(3)
@@ -205,17 +205,10 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             self.ping_results_table.setItem(row, 1, QTableWidgetItem(self.lookup_icmp_type(reply.type)))
             self.ping_results_table.setItem(row, 2, QTableWidgetItem(str(date)))
 
-            # Debug terminal output
-            print(reply.source + " (" + self.lookup_icmp_type(reply.type) + ") @" + str(date))
-
-            print(type(reply.time))
-
             if stop_ping:
-                print("Stop button pushed")
                 break
 
             row += 1
-        print("Thread stopped")
 
     # Table with all non-deprecated and non-reserved ICMP types
     # https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
