@@ -18,6 +18,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 
 from icmplib import ICMPv4Socket, ICMPv6Socket, ICMPRequest, ICMPReply
 
+
 # Resource path bepalen
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -29,6 +30,18 @@ def resource_path(relative_path):
     # logging.info('Pyinstaller file location {}'.format(base_path))
     return os.path.join(base_path, relative_path)
 
+
+def thread(func):
+    @functools.wraps(func)
+    def wrapper(self, **kwargs):
+        if 'daemon' in kwargs:
+            daemon = kwargs.pop('daemon')
+        else:
+            daemon = True
+        t = threading.Thread(target=func, args=[self], daemon=daemon)
+        t.start()
+
+    return wrapper
 
 # External files
 ui_main_window = resource_path('resources/ui/main.ui')
@@ -106,6 +119,9 @@ def state_scan(ip) -> bool:
         return False
 
 
+stop_ping = False
+
+
 class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def __init__(self):
         super().__init__()
@@ -133,7 +149,8 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.pb_known_20.setIcon(QIcon(QPixmap(icon_circle_info)))
         self.pb_known_100.setIcon(QIcon(QPixmap(icon_circle_info)))
         # Comming soon Ping detector
-        self.ping_listen_button.clicked.connect(self.start_ping_scan)
+        self.ping_listen_button_start.clicked.connect(self.start_ping_scan)
+        self.ping_listen_button_stop.clicked.connect(self.stop_ping_scan)
         self.ping_results_table.setColumnCount(3)
         self.ping_results_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.ping_results_table.setHorizontalHeaderLabels(["Source", "ICMP Type", "Time"])
@@ -150,13 +167,19 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
             sys.exit(self.criticalbox("To use this application NMAP is required!\n\n"
                                       "sudo apt install nmap -yy"))
 
+    def stop_ping_scan(self):
+        global stop_ping
+        stop_ping = True
+        return stop_ping
+
+    @thread
     def start_ping_scan(self):
         # Check if we are root, because opening sockets is going to require root
         if not os.geteuid() == 0:
             sys.exit(self.criticalbox("\nOnly root can run listen for ICMP packets.\n"))
 
-        # Change button text after it got pressed
-        self.ping_listen_button.setText("Stop listening")
+        global stop_ping
+        stop_ping = False
 
         # Prepare tables
         self.ping_results_table.clearContents()
@@ -165,14 +188,13 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         row = 0
         sock = ICMPv4Socket()
 
-        # TODO: Make the UI not feeze by processing events in while loop
-        while(1):
+        while True:
             reply = sock.receive(None, 2000)
 
             # Add listen entry to table
-            self.ping_results_table.setRowCount(row+1)
+            self.ping_results_table.insertRow(row)
             self.ping_results_table.setItem(row, 0, QTableWidgetItem(reply.source))
-            self.ping_results_table.setItem(row, 1, QTableWidgetItem(reply.type))
+            self.ping_results_table.setItem(row, 1, QTableWidgetItem(str(reply.type)))
             self.ping_results_table.setItem(row, 2, QTableWidgetItem(str(reply.time)))
 
             # Debug terminal output
@@ -180,14 +202,13 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
             # 192.168.10.118 (8) @1621035549.1015074
             # 192.168.10.118 (8) @1621035550.1064825
-            # 192.168.10.118 (8) @1621035551.1090019
-            # 192.168.10.118 (8) @1621035552.1102564
-            # 192.168.10.118 (8) @1621035553.113729
-            # 192.168.10.118 (8) @1621035554.1151152
-            # 192.168.10.118 (8) @1621035555.1165154
-            # 192.168.10.118 (8) @1621035556.1213787
+
+            if stop_ping:
+                print("Stop button pushed")
+                break
 
             row += 1
+        print("Thread stopped")
 
     def get_network_data(self):
         self.list_network_data.clear()

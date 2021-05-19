@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="network_scan_tab">
      <attribute name="title">
@@ -341,7 +341,7 @@
      <attribute name="title">
       <string>Ping Detector</string>
      </attribute>
-     <widget class="QPushButton" name="ping_listen_button">
+     <widget class="QPushButton" name="ping_listen_button_start">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -351,7 +351,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Listen</string>
+       <string>Start</string>
       </property>
       <property name="shortcut">
        <string>Return</string>
@@ -368,6 +368,22 @@
       </property>
       <property name="sortingEnabled">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ping_listen_button_stop">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>10</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Stop</string>
+      </property>
+      <property name="shortcut">
+       <string>Return</string>
       </property>
      </widget>
     </widget>
