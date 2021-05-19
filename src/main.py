@@ -155,6 +155,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.ping_results_table.setColumnCount(3)
         self.ping_results_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.ping_results_table.setHorizontalHeaderLabels(["Source", "ICMP Type", "Time"])
+        self.ping_listen_button_stop.setEnabled(False)
 
         for nic in get_networkcards():
             self.combo_networkcard.addItem(nic)
@@ -171,6 +172,8 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def stop_ping_scan(self):
         global stop_ping
         stop_ping = True
+        self.ping_listen_button_stop.setEnabled(False)
+        self.ping_listen_button_start.setEnabled(True)
         return stop_ping
 
     @thread
@@ -181,6 +184,8 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
 
         global stop_ping
         stop_ping = False
+        self.ping_listen_button_stop.setEnabled(True)
+        self.ping_listen_button_start.setEnabled(False)
 
         # Prepare tables
         self.ping_results_table.clearContents()
