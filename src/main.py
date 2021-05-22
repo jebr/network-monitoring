@@ -3,9 +3,11 @@ import sys
 import os
 import ipaddress
 import nmap
-import re
 import netifaces
 import datetime
+import functools
+import threading
+
 
 # PyQT modules
 from PyQt5.QtCore import QDateTime
@@ -174,12 +176,16 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.ping_listen_button_start.setEnabled(True)
         return stop_ping
 
-    @thread
     def start_ping_scan(self):
         # Check if we are root, because opening sockets is going to require root
         if not os.geteuid() == 0:
-            sys.exit(self.criticalbox("\nOnly root can run listen for ICMP packets.\n"))
+            self.criticalbox("\nOnly root can run listen for ICMP packets.\n"
+                             "Restart the application with root privileges")
+        else:
+            self.ping_scan()
 
+    @thread
+    def ping_scan(self):
         global stop_ping
         stop_ping = False
         self.ping_listen_button_stop.setEnabled(True)
@@ -195,7 +201,7 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         while True:
             reply = sock.receive(None, 2000)
 
-            date = datetime.fromtimestamp(int(reply.time))
+            date = datetime.datetime.fromtimestamp(int(reply.time))
 
             # Add listen entry to table
             self.ping_results_table.insertRow(row)
