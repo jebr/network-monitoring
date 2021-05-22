@@ -5,6 +5,7 @@ import ipaddress
 import nmap
 import re
 import netifaces
+import datetime
 from scapy.all import *
 from scapy.layers.http import HTTPRequest  # import HTTP packet
 
@@ -15,6 +16,8 @@ from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox, \
     QTableWidgetItem, QLabel, QTabWidget
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
+
+from icmplib import ICMPv4Socket, ICMPv6Socket, ICMPRequest, ICMPReply
 
 
 # Resource path bepalen
@@ -28,6 +31,18 @@ def resource_path(relative_path):
     # logging.info('Pyinstaller file location {}'.format(base_path))
     return os.path.join(base_path, relative_path)
 
+
+def thread(func):
+    @functools.wraps(func)
+    def wrapper(self, **kwargs):
+        if 'daemon' in kwargs:
+            daemon = kwargs.pop('daemon')
+        else:
+            daemon = True
+        t = threading.Thread(target=func, args=[self], daemon=daemon)
+        t.start()
+
+    return wrapper
 
 # External files
 ui_main_window = resource_path('resources/ui/main.ui')
@@ -105,6 +120,9 @@ def state_scan(ip) -> bool:
         return False
 
 
+stop_ping = False
+
+
 class MainPage(QtWidgets.QMainWindow, BaseWindow):
     def __init__(self):
         super().__init__()
@@ -131,9 +149,13 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         self.pb_known_100.clicked.connect(self.open_top100_window)
         self.pb_known_20.setIcon(QIcon(QPixmap(icon_circle_info)))
         self.pb_known_100.setIcon(QIcon(QPixmap(icon_circle_info)))
-        # Comming soon Ping detector
-        pixmap = QPixmap(comming_soon_img)
-        self.lb_comming_soon.setPixmap(pixmap)
+        # Ping detector
+        self.ping_listen_button_start.clicked.connect(self.start_ping_scan)
+        self.ping_listen_button_stop.clicked.connect(self.stop_ping_scan)
+        self.ping_results_table.setColumnCount(3)
+        self.ping_results_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.ping_results_table.setHorizontalHeaderLabels(["Source", "ICMP Type", "Time"])
+        self.ping_listen_button_stop.setEnabled(False)
 
         for nic in get_networkcards():
             self.combo_networkcard.addItem(nic)
@@ -146,6 +168,71 @@ class MainPage(QtWidgets.QMainWindow, BaseWindow):
         except:
             sys.exit(self.criticalbox("To use this application NMAP is required!\n\n"
                                       "sudo apt install nmap -yy"))
+
+    def stop_ping_scan(self):
+        global stop_ping
+        stop_ping = True
+        self.ping_listen_button_stop.setEnabled(False)
+        self.ping_listen_button_start.setEnabled(True)
+        return stop_ping
+
+    @thread
+    def start_ping_scan(self):
+        # Check if we are root, because opening sockets is going to require root
+        if not os.geteuid() == 0:
+            sys.exit(self.criticalbox("\nOnly root can run listen for ICMP packets.\n"))
+
+        global stop_ping
+        stop_ping = False
+        self.ping_listen_button_stop.setEnabled(True)
+        self.ping_listen_button_start.setEnabled(False)
+
+        # Prepare tables
+        self.ping_results_table.clearContents()
+        self.ping_results_table.setRowCount(0)
+
+        row = 0
+        sock = ICMPv4Socket()
+
+        while True:
+            reply = sock.receive(None, 2000)
+
+            date = datetime.fromtimestamp(int(reply.time))
+
+            # Add listen entry to table
+            self.ping_results_table.insertRow(row)
+            self.ping_results_table.setItem(row, 0, QTableWidgetItem(reply.source))
+            self.ping_results_table.setItem(row, 1, QTableWidgetItem(self.lookup_icmp_type(reply.type)))
+            self.ping_results_table.setItem(row, 2, QTableWidgetItem(str(date)))
+
+            if stop_ping:
+                break
+
+            row += 1
+
+    # Table with all non-deprecated and non-reserved ICMP types
+    # https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+    def lookup_icmp_type(self, icmp_type):
+        types = {
+            0: "Echo Reply",
+            3: "Destination Unreachable",
+            5: "Redirect",
+            8: "Echo",
+            9: "Router Advertisement",
+            10: "Router Selection",
+            11: "Time Exceeded",
+            12: "Parameter Problem",
+            13: "Timestamp",
+            14: "Timestamp Reply",
+            40: "Photuris",
+            42: "Extended Echo Request",
+            43: "Extended Echo Reply"
+        }
+
+        if int(icmp_type) in types:
+            return types[int(icmp_type)]
+        else:
+            return "Unknown ICMP type (" + str(icmp_type) + ")"
 
     def get_network_data(self):
         self.list_network_data.clear()
