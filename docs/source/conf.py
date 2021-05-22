@@ -19,10 +19,10 @@ import sphinx_rtd_theme
 
 project = 'Network Monitoring'
 copyright = '2021, Jeroen Brauns'
-author = 'Jeroen Brauns'
+author = 'Jeroen Brauns, Martijn van Hoof'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0'
+release = '2.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -82,3 +82,5 @@ html_show_sphinx = False
 today_fmt = '%d %B %Y at %H:%M'
 
 html_last_updated_fmt = '%d %B %Y at %H:%M'
+
+show_authors = True
