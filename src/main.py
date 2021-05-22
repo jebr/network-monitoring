@@ -6,8 +6,6 @@ import nmap
 import re
 import netifaces
 import datetime
-from scapy.all import *
-from scapy.layers.http import HTTPRequest  # import HTTP packet
 
 # PyQT modules
 from PyQt5.QtCore import QDateTime
